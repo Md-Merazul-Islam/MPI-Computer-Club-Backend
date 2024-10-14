@@ -22,7 +22,7 @@ rm db.sqlite3
 python manage.py makemigrations
 python manage.py migrate
 
-https://school-management-five-iota.vercel.app/
+https://mpi-computer-club-backend.vercel.app/
 
 
 
