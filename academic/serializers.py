@@ -3,6 +3,8 @@ from .models import Student, Teacher, Class, Subject,Notice, Review
 from activites.models import Mark
 from activites.serializers import  MarkSerializer
 from rest_framework.exceptions import ValidationError
+from rest_framework import serializers
+import re
 
 class ClassSerializer(serializers.ModelSerializer):
     class Meta:
@@ -88,17 +90,13 @@ class SubjectSerializer(serializers.ModelSerializer):
 
 
 
+from rest_framework import serializers
+import re
 
 class NoticeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notice
         fields = ['id', 'title', 'description', 'file', 'created_at']
-
-    def validate_file(self, value):
-        """Ensure only PDF and image files are allowed."""
-        if value and not value.name.endswith(('.pdf', '.png', '.jpg', '.jpeg')):
-            raise serializers.ValidationError("Only PDF and image files are allowed.")
-        return value
 
     def update(self, instance, validated_data):
         """Update only provided fields and ensure file is not reset to null."""
@@ -108,7 +106,7 @@ class NoticeSerializer(serializers.ModelSerializer):
         instance.title = validated_data.get('title', instance.title)
         instance.description = validated_data.get('description', instance.description)
 
-        # Only update the file if a new file is provided
+        # Only update the file if a new file URL is provided
         if file is not None:
             instance.file = file
         
